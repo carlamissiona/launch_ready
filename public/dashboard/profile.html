@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - User Form Management System</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>User Form Management System</h1>
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/dashboard/profile.html" class="active">Profile</a></li>
+          <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="message" class="message"></div>
+    
+    <section class="profile-container">
+      <h2>Your Profile</h2>
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" disabled>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address">
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city">
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Account Type</label>
+          <p id="accountType" class="account-type">Free Account</p>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Form Management System. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check authentication
+      checkAuth();
+      
+      // DOM Elements
+      const profileForm = document.getElementById('profileForm');
+      const messageDiv = document.getElementById('message');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const accountTypeElement = document.getElementById('accountType');
+      
+      // Event Listeners
+      logoutBtn.addEventListener('click', logout);
+      profileForm.addEventListener('submit', updateProfile);
+      
+      // Functions
+      async function checkAuth() {
+        try {
+          const response = await fetch('/api/profile');
+          
+          if (!response.ok) {
+            window.location.href = '/login.html';
+            return;
+          }
+          
+          const user = await response.json();
+          populateProfileForm(user);
+        } catch (error) {
+          console.error('Auth check error:', error);
+          window.location.href = '/login.html';
+        }
+      }
+      
+      function populateProfileForm(user) {
+        document.getElementById('fullname').value = user.fullname || '';
+        document.getElementById('email').value = user.email || '';
+        document.getElementById('address').value = user.address || '';
+        document.getElementById('city').value = user.city || '';
+        document.getElementById('bio').value = user.bio || '';
+        
+        accountTypeElement.textContent = user.paid_user ? 'Premium Account' : 'Free Account';
+        accountTypeElement.className = `account-type ${user.paid_user ? 'premium' : 'free'}`;
+      }
+      
+      async function updateProfile(e) {
+        e.preventDefault();
+        
+        const formData = {
+          fullname: document.getElementById('fullname').value,
+          address: document.getElementById('address').value,
+          city: document.getElementById('city').value,
+          bio: document.getElementById('bio').value
+        };
+        
+        try {
+          const response = await fetch('/api/profile', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+          
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to update profile');
+          }
+          
+          const data = await response.json();
+          showMessage(data.message, 'success');
+        } catch (error) {
+          console.error('Update profile error:', error);
+          showMessage(error.message || 'An error occurred while updating your profile', 'error');
+        }
+      }
+      
+      async function logout() {
+        try {
+          const response = await fetch('/api/logout', {
+            method: 'POST'
+          });
+          
+          if (response.ok) {
+            window.location.href = '/';
+          } else {
+            showMessage('Logout failed', 'error');
+          }
+        } catch (error) {
+          console.error('Logout error:', error);
+          showMessage('An error occurred during logout', 'error');
+        }
+      }
+      
+      function showMessage(message, type) {
+        messageDiv.textContent = message;
+        messageDiv.className = `message ${type}`;
+        messageDiv.style.display = 'block';
+        
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - User Form Management System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>User Form Management System</h1>
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="/dashboard" class="active">Dashboard</a></li>
+          <li><a href="/dashboard/profile.html">Profile</a></li>
+          <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="message" class="message"></div>
+    
+    <section class="dashboard-header">
+      <h2>Welcome, <span id="userName">User</span>!</h2>
+      <button id="newFormBtn" class="btn btn-primary">Create New Form</button>
+    </section>
+    
+    <section class="forms-container">
+      <h3>Your Forms</h3>
+      <div class="form-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="draft">Drafts</button>
+        <button class="filter-btn" data-filter="published">Published</button>
+      </div>
+      <div id="formsList" class="forms-list">
+        <p class="no-forms-message">No forms found. Create your first form!</p>
+      </div>
+    </section>
+    
+    <!-- Form Modal -->
+    <div id="formModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="modalTitle">Create New Form</h3>
+        <form id="formEditor">
+          <input type="hidden" id="formId">
+          <div class="form-group">
+            <label for="formDescription">Description</label>
+            <input type="text" id="formDescription" name="description" required>
+          </div>
+          <div class="form-group">
+            <label for="formType">Type</label>
+            <select id="formType" name="type" required>
+              <option value="">Select a type</option>
+              <option value="survey">Survey</option>
+              <option value="feedback">Feedback</option>
+              <option value="application">Application</option>
+              <option value="contact">Contact</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="formContent">Form Content</label>
+            <textarea id="formContent" name="formcontent" rows="10" required></textarea>
+          </div>
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="isDraft" name="isDraft" checked>
+            <label for="isDraft">Save as Draft</label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Form</button>
+            <button type="button" id="cancelFormBtn" class="btn btn-secondary">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete this form? This action cannot be undone.</p>
+        <div class="form-actions">
+          <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+          <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Form Management System. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check authentication
+      checkAuth();
+      
+      // DOM Elements
+      const userNameElement = document.getElementById('userName');
+      const formsList = document.getElementById('formsList');
+      const messageDiv = document.getElementById('message');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const newFormBtn = document.getElementById('newFormBtn');
+      const formModal = document.getElementById('formModal');
+      const deleteModal = document.getElementById('deleteModal');
+      const formEditor = document.getElementById('formEditor');
+      const modalTitle = document.getElementById('modalTitle');
+      const formIdInput = document.getElementById('formId');
+      const cancelFormBtn = document.getElementById('cancelFormBtn');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+      const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      
+      let currentFilter = 'all';
+      let forms = [];
+      let formToDelete = null;
+      
+      // Event Listeners
+      logoutBtn.addEventListener('click', logout);
+      newFormBtn.addEventListener('click', () => openFormModal());
+      formEditor.addEventListener('submit', saveForm);
+      cancelFormBtn.addEventListener('click', closeFormModal);
+      document.querySelector('.close-modal').addEventListener('click', closeFormModal);
+      confirmDeleteBtn.addEventListener('click', deleteForm);
+      cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          currentFilter = button.dataset.filter;
+          renderForms();
+        });
+      });
+      
+      // Functions
+      async function checkAuth() {
+        try {
+          const response = await fetch('/api/profile');
+          
+          if (!response.ok) {
+            window.location.href = '/login.html';
+            return;
+          }
+          
+          const user = await response.json();
+          userNameElement.textContent = user.fullname;
+          
+          // Load forms after authentication is confirmed
+          loadForms();
+        } catch (error) {
+          console.error('Auth check error:', error);
+          window.location.href = '/login.html';
+        }
+      }
+      
+      async function loadForms() {
+        try {
+          const response = await fetch('/api/forms');
+          
+          if (!response.ok) {
+            showMessage('Failed to load forms', 'error');
+            return;
+          }
+          
+          forms = await response.json();
+          renderForms();
+        } catch (error) {
+          console.error('Load forms error:', error);
+          showMessage('An error occurred while loading forms', 'error');
+        }
+      }
+      
+      function renderForms() {
+        if (forms.length === 0) {
+          formsList.innerHTML = '<p class="no-forms-message">No forms found. Create your first form!</p>';
+          return;
+        }
+        
+        let filteredForms = forms;
+        
+        if (currentFilter === 'draft') {
+          filteredForms = forms.filter(form => form.isdraft);
+        } else if (currentFilter === 'published') {
+          filteredForms = forms.filter(form => !form.isdraft);
+        }
+        
+        if (filteredForms.length === 0) {
+          formsList.innerHTML = `<p class="no-forms-message">No ${currentFilter === 'draft' ? 'draft' : 'published'} forms found.</p>`;
+          return;
+        }
+        
+        formsList.innerHTML = filteredForms.map(form => `
+          <div class="form-card ${form.isdraft ? 'draft' : 'published'}">
+            <div class="form-card-header">
+              <h4>${form.description}</h4>
+              <span class="form-type">${form.type}</span>
+            </div>
+            <div class="form-card-body">
+              <p>${form.formcontent.substring(0, 100)}${form.formcontent.length > 100 ? '...' : ''}</p>
+            </div>
+            <div class="form-card-footer">
+              <span class="form-status">${form.isdraft ? 'Draft' : 'Published'}</span>
+              <div class="form-actions">
+                <button class="btn btn-sm btn-edit" data-id="${form.uuid}">Edit</button>
+                <button class="btn btn-sm btn-danger" data-id="${form.uuid}">Delete</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        
+        // Add event listeners to edit and delete buttons
+        document.querySelectorAll('.btn-edit').forEach(button => {
+          button.addEventListener('click', () => {
+            const formId = button.dataset.id;
+            const form = forms.find(f => f.uuid === formId);
+            openFormModal(form);
+          });
+        });
+        
+        document.querySelectorAll('.btn-danger').forEach(button => {
+          button.addEventListener('click', () => {
+            formToDelete = button.dataset.id;
+            openDeleteModal();
+          });
+        });
+      }
+      
+      function openFormModal(form = null) {
+        modalTitle.textContent = form ? 'Edit Form' : 'Create New Form';
+        
+        if (form) {
+          formIdInput.value = form.uuid;
+          document.getElementById('formDescription').value = form.description;
+          document.getElementById('formType').value = form.type;
+          document.getElementById('formContent').value = form.formcontent;
+          document.getElementById('isDraft').checked = form.isdraft;
+        } else {
+          formEditor.reset();
+          formIdInput.value = '';
+        }
+        
+        formModal.style.display = 'block';
+      }
+      
+      function closeFormModal() {
+        formModal.style.display = 'none';
+        formEditor.reset();
+      }
+      
+      function openDeleteModal() {
+        deleteModal.style.display = 'block';
+      }
+      
+      function closeDeleteModal() {
+        deleteModal.style.display = 'none';
+        formToDelete = null;
+      }
+      
+      async function saveForm(e) {
+        e.preventDefault();
+        
+        const formId = formIdInput.value;
+        const isEdit = !!formId;
+        
+        const formData = {
+          description: document.getElementById('formDescription').value,
+          type: document.getElementById('formType').value,
+          formcontent: document.getElementById('formContent').value,
+          isDraft: document.getElementById('isDraft').checked
+        };
+        
+        try {
+          const url = isEdit ? `/api/forms/${formId}` : '/api/forms';
+          const method = isEdit ? 'PUT' : 'POST';
+          
+          const response = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+          
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to save form');
+          }
+          
+          const data = await response.json();
+          
+          showMessage(data.message, 'success');
+          closeFormModal();
+          
+          // Refresh forms list
+          loadForms();
+        } catch (error) {
+          console.error('Save form error:', error);
+          showMessage(error.message || 'An error occurred while saving the form', 'error');
+        }
+      }
+      
+      async function deleteForm() {
+        if (!formToDelete) return;
+        
+        try {
+          const response = await fetch(`/api/forms/${formToDelete}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to delete form');
+          }
+          
+          const data = await response.json();
+          
+          showMessage(data.message, 'success');
+          closeDeleteModal();
+          
+          // Refresh forms list
+          loadForms();
+        } catch (error) {
+          console.error('Delete form error:', error);
+          showMessage(error.message || 'An error occurred while deleting the form', 'error');
+        }
+      }
+      
+      async function logout() {
+        try {
+          const response = await fetch('/api/logout', {
+            method: 'POST'
+          });
+          
+          if (response.ok) {
+            window.location.href = '/';
+          } else {
+            showMessage('Logout failed', 'error');
+          }
+        } catch (error) {
+          console.error('Logout error:', error);
+          showMessage('An error occurred during logout', 'error');
+        }
+      }
+      
+      function showMessage(message, type) {
+        messageDiv.textContent = message;
+        messageDiv.className = `message ${type}`;
+        messageDiv.style.display = 'block';
+        
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>
