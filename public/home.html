@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Steller landing page.">
+    <meta name="author" content="Devcrud">
+    <title>Steller Landing page | Free Bootstrap 4.1 landing page</title>
+    <!-- font icons -->
+    <link rel="stylesheet" href="theme/assets/vendors/themify-icons/css/themify-icons.css">
+    <!-- Bootstrap + Steller main styles -->
+	<link rel="stylesheet" href="theme/assets/css/steller.css">
+    <style>
+        /* Reset and base styles */
+      
+    
+        /* Desktop styles */
+        .desktop {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          padding: 4rem;
+        }
+    
+        /* Icon styles */
+        .icons-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 3rem;
+          width: max-content;
+        }
+        .f1{
+            left:10em;
+        }
+        .f2{
+            left:17em;
+        }
+        .f3{
+            left:2em;
+        }
+    
+        .icon { 
+          cursor: grab;
+          position: absolute;
+          user-select: none;
+          z-index: 1;
+          transition: transform 0.2s ease;
+        }
+    
+        .icon:active {
+          cursor: grabbing;
+        }
+    
+        .icon:hover {
+          transform: scale(1.05);
+        }
+    
+        .icon-box {
+          width: 100px;
+          height: 100px;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+        }
+    
+        .icon-box:hover {
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+          transform: translateY(-5px);
+        }
+    
+        .icon-label {
+          margin-top: 1rem;
+          text-align: center;
+          font-size: 1rem;
+          font-weight: 600;
+          color: #34495e;
+        }
+    
+        .form1 {
+          background-color: #ebf5fe;
+          left: 4rem;
+          top: 4rem;
+        }
+    
+        .form2 {
+          background-color: #e6fcf5;
+          left: 12rem;
+          top: 4rem;
+        }
+    
+        .form3 {
+          background-color: #f3e8ff;
+          left: 20rem;
+          top: 4rem;
+        }
+    
+        /* Chat box styles */
+        .chat-box {
+
+          z-index:2000!important;
+          position: fixed;
+          right: 0;
+          bottom: 0;
+          height: 75%;
+          width: 35%; 
+
+          background-color: #ffffff;
+          border-left: 1px solid #e2e8f0;
+          box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+          z-index: 10;
+          transform: translateX(100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    
+        .chat-box.open {
+          transform: translateX(0);
+        }
+    
+        .chat-header {
+          padding: 1.5rem;
+          border-bottom: 1px solid #e2e8f0;
+          background-color: #f8fafc;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+    
+        .chat-title {
+          font-weight: 700;
+          font-size: 1.25rem;
+          color: #2c3e50;
+        }
+    
+        .close-button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.2s ease;
+        }
+    
+        .close-button:hover {
+          background-color: #e2e8f0;
+        }
+    
+        .chat-messages {
+          flex: 1;
+          padding: 1.5rem;
+          overflow-y: auto;
+        }
+    
+        .message {
+          max-width: 80%;
+          border-radius: 18px;
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+          position: relative;
+          line-height: 1.4;
+        }
+    
+        .message p {
+          margin-bottom: 0.5rem;
+        }
+    
+        .message .timestamp {
+          font-size: 0.75rem;
+          opacity: 0.7;
+        }
+    
+        .system-message {
+          background-color: #f1f5f9;
+          align-self: flex-start;
+        }
+    
+        .user-message {
+          background-color: #3498db;
+          color: white;
+          margin-left: auto;
+        }
+    
+        .message-container {
+          display: flex;
+          margin-bottom: 1.5rem;
+        }
+    
+        .message-container.user {
+          justify-content: flex-end;
+        }
+    
+        .chat-input {
+          padding: 1.5rem;
+          border-top: 1px solid #e2e8f0;
+          display: flex;
+          gap: 1rem;
+        }
+    
+        .message-input {
+          flex: 1;
+          padding: 1rem;
+          border: 2px solid #e2e8f0;
+          border-radius: 25px;
+          outline: none;
+          font-size: 1rem;
+          transition: border-color 0.2s ease;
+        }
+    
+        .message-input:focus {
+          border-color: #3498db;
+        }
+    
+        .send-button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+    
+        .send-button:hover {
+          background-color: #2980b9;
+        }
+    
+        /* Icon SVGs */
+        .icon-svg {
+          width: 50px;
+          height: 50px;
+          stroke: #34495e;
+          stroke-width: 1.5;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          fill: none;
+        }
+    
+        .send-svg {
+          width: 20px;
+          height: 20px;
+          stroke: white;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          fill: none;
+        }
+    
+        .close-svg {
+          width: 24px;
+          height: 24px;
+          stroke: #64748b;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          fill: none;
+        }
+      </style>
+    
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <!-- Page navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" data-spy="affix" data-offset-top="0">
+        <div class="container">
+           <!--- <a class="navbar-brand" href="#"><img src="theme/assets/imgs/logo.svg" alt=""></a> -->
+<h4>Launch Ready</h4>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>   
+                    <li class="nav-item">
+                      <div class="btn-group">
+                          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Launch A Startup Now
+                          </button>
+                          <div class="dropdown-menu form" style="min-width:250px;">
+                            <form class="px-4 py-3">
+                                <div class="form-group">
+                                  <input type="email" class="form-control"  placeholder="email@example.com">
+                                </div>
+                                <div class="form-group">
+                                  <input type="password" class="form-control"  placeholder="Password">
+                                </div> 
+                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                            </form>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#"><small>Learn to launch a business. Get started Now!</small></a> 
+                          </div>
+                      </div>     
+                    </li>
+                </ul>
+            </div>
+        </div>          
+    </nav>
+    <!-- End of page navibation -->
+
+    <!-- Page Header -->
+    <header class="header" id="home">
+        <div class="container">
+ <div class="row">
+ <div class="col-md-8">                     
+           <!--desktop--> 
+   
+           <div class="desktop" id="desktop" style="max-height:300px;">
+                <!-- Icons -->
+                <div class="icons-container">
+                <div class="icon f1" data-form="form1">
+                    <div class="icon-box form1">
+                    <svg class="icon-svg" viewBox="0 0 24 24">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                    </div>
+                    <p class="icon-label" style="font-size:14px;">One-page Plan</p>
+                </div>
+                
+                <div class="icon f2" data-form="form2" >
+                    <div class="icon-box form2">
+                    <svg class="icon-svg" viewBox="0 0 24 24">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                    </div>
+                    <p class="icon-label" style="font-size:14px;">Business Model Canvas</p>
+                </div>
+                
+                <div class="icon f3" data-form="form3">
+                    <div class="icon-box form3">
+                    <svg class="icon-svg" viewBox="0 0 24 24">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                </div>
+                    <p class="icon-label" style="font-size:14px;">Lean Canvas </p>
+                </div>
+                </div>
+            
+                <!-- Chat Box -->
+                <div class="chat-box" id="chatBox">
+                <div class="chat-header">
+                    <h2 class="chat-title" id="chatTitle">Form</h2>
+                    <button class="close-button" id="closeChat">
+                    <svg class="close-svg" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    </button>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+                    <button class="send-button" id="sendMessage">
+                    <svg class="send-svg" viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    </button>
+                </div>
+                </div>
+            </div>
+
+           <!--end desktop-->    
+</div>
+ 
+</div><!--Row ends-->
+
+        </div>  
+
+        <!-- Header-widget -->
+        <div class="widget">
+            <div class="widget-item">
+                <h2>124</h2>
+                <p>Happy Clients</p>
+            </div>
+            <div class="widget-item">
+                <h2>456</h2>
+                <p>Project Completed</p>
+            </div>
+            <div class="widget-item">
+                <h2>789</h2>
+                <p>Awards Won</p>
+            </div>
+        </div>
+    </header>
+    <!-- End of Page Header -->
+    
+    <!-- About section -->
+    <section id="about" class="section mt-3">
+        <div class="container mt-5">
+            <div class="row text-center text-md-left">
+                <div class="col-md-3">
+                    <img src="theme/assets/imgs/avatar.jpg" alt="" class="img-thumbnail mb-4">
+                </div>
+                <div class="pl-md-4 col-md-9">
+                    <h6 class="title">James Smith</h6>
+                    <p class="subtitle">UI/UX Designer</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, pariatur, aperiam aut autem voluptas odit. Odio ducimus delectus totam sed aliquam sequi praesentium mollitia, illum repudiandae quidem quod, magni magnam.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim, eius, nam. Quo praesentium qui temporibus voluptatum, facilis aliquid eligendi fugiat beatae neque inventore non. Laborum repellendus consequatur ullam voluptatum asperiores.</p>
+                    <button class="btn btn-primary rounded mt-3">DOWNLOAD CV</button>                   
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service section -->
+    <section id="service" class="section">
+        <div class="container text-center">
+            <h6 class="subtitle">Service</h6>
+            <h6 class="section-title mb-4">What I Do</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-3 mb-4">
+                    <div class="custom-card card border">
+                        <div class="card-body">
+                            <i class="icon ti-crown"></i>
+                            <h5>UI/UX Design</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 mb-4">
+                    <div class="custom-card card border">
+                        <div class="card-body">
+                            <i class="icon ti-desktop"></i>
+                            <h5>Web Design</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 mb-4">
+                    <div class="custom-card card border">
+                        <div class="card-body">
+                            <i class="icon ti-mobile"></i>
+                            <h5>App Design</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 mb-4">
+                    <div class="custom-card card border">
+                        <div class="card-body">
+                            <i class="icon ti-bar-chart"></i>
+                            <h5>SEO</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Sectoin -->
+
+    <!-- Skills section -->
+    <section class="section">
+        <div class="container text-center">
+            <h6 class="subtitle">Skills</h6>
+            <h6 class="section-title mb-4">Why Choose me</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+            <div class="row text-left">
+                <div class="col-sm-6">
+                    <h6 class="mb-3">Photoshop</h6>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span>89%</span></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h6 class="mb-3">Web Design</h6>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 83%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span>83%</span></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h6 class="mb-3">App Design</h6>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 95%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span>95%</span></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h6 class="mb-3">SEO</h6>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 90%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span>90%</span></div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </section>
+    <!-- End of Skills sections -->
+
+    <!-- Portfolio section -->
+    <section id="portfolio" class="section">
+        <div class="container text-center">
+            <h6 class="subtitle">Portfolio</h6>
+            <h6 class="section-title mb-4">Check My Wonderful Works</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-1.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-2.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>                              
+                        </div>
+                    </div>                  
+                </div>
+                <div class="col-sm-4">
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-3.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-4.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>                              
+                        </div>
+                    </div>                  
+                </div>
+                <div class="col-sm-4">
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-5.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="theme/assets/imgs/folio-6.jpg" alt="">
+                        <div class="overlay">
+                            <div class="overlay-infos">
+                                <h5>Project Title</h5>
+                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                            </div>                              
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- End of portfolio section -->
+
+    <!-- Testmonial Section -->
+    <section id="testmonial" class="section">
+        <div class="container text-center">
+            <h6 class="subtitle">Testmonial</h6>
+            <h6 class="section-title mb-4">What People Say About Me</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="card testmonial-card border">
+                            <div class="card-body">
+                                <img src="theme/assets/imgs/avatar-1.jpg" alt="">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam nostrum voluptates in enim vel amet?</p>
+                                <h1 class="title">Emma Re</h1>
+                                <h1 class="subtitle">Graphic Designer</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card testmonial-card border">
+                            <div class="card-body">
+                                <img src="theme/assets/imgs/avatar-2.jpg" alt="">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam nostrum voluptates in enim vel amet?</p>
+                                <h1 class="title">James Bert</h1>
+                                <h1 class="subtitle">Web Designer</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card testmonial-card border">
+                            <div class="card-body">
+                                <img src="theme/assets/imgs/avatar-3.jpg" alt="">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam nostrum voluptates in enim vel amet?</p>
+                                <h1 class="title">Michael Abra</h1>
+                                <h1 class="subtitle">Web Developer</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of testmonial section -->
+
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="container text-center">
+            <h6 class="subtitle">My Blogs</h6>
+            <h6 class="section-title mb-4">Latest News</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+            <div class="row text-left">
+                <div class="col-md-4">
+                    <div class="card border mb-4">
+                        <img src="theme/assets/imgs/blog-1.jpg" alt="" class="card-img-top w-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Designe for Everyone</h5>
+                            <div class="post-details">
+                                <a href="javascript:void(0)">Posted By: Admin</a>
+                                <a href="javascript:void(0)"><i class="ti-thumb-up"></i> 456</a>
+                                <a href="javascript:void(0)"><i class="ti-comment"></i> 123</a>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut ad vel dolorum, iusto velit, minima? Voluptas nemo harum impedit nisi.</p>
+                            <a href="javascript:void(0)">Read More..</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border mb-4">
+                        <img src="theme/assets/imgs/blog-2.jpg" alt="" class="card-img-top w-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Web Layouts</h5>
+                            <div class="post-details">
+                                <a href="javascript:void(0)">Posted By: Admin</a>
+                                <a href="javascript:void(0)"><i class="ti-thumb-up"></i> 456</a>
+                                <a href="javascript:void(0)"><i class="ti-comment"></i> 123</a>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut ad vel dolorum, iusto velit, minima? Voluptas nemo harum impedit nisi.</p>
+                            <a href="javascript:void(0)">Read More..</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border mb-4">
+                        <img src="theme/assets/imgs/blog-3.jpg" alt="" class="card-img-top w-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Bootstrap Framework</h5>
+                            <div class="post-details">
+                                <a href="javascript:void(0)">Posted By: Admin</a>
+                                <a href="javascript:void(0)"><i class="ti-thumb-up"></i> 456</a>
+                                <a href="javascript:void(0)"><i class="ti-comment"></i> 123</a>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut ad vel dolorum, iusto velit, minima? Voluptas nemo harum impedit nisi.</p>
+                            <a href="javascript:void(0)">Read More..</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hire me section -->
+    <section class="bg-gray p-0 section">
+        <div class="container">
+            <div class="card bg-primary">
+                <div class="card-body text-light">
+                    <div class="row align-items-center">
+                        <div class="col-sm-9 text-center text-sm-left">
+                            <h5 class="mt-3">Hire Me For Your Project</h5>
+                            <p class="mb-3">Accusantium labore nostrum similique quisquam.</p>
+                        </div>
+                        <div class="col-sm-3 text-center text-sm-right">
+                            <button class="btn btn-light rounded">Hire Me!</button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </section>      
+    <!-- End od Hire me section. -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="position-relative section">
+        <div class="container text-center">
+            <h6 class="subtitle">Contact</h6>
+            <h6 class="section-title mb-4">Get In Touch With Me</h6>
+            <p class="mb-5 pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In alias dignissimos. <br> rerum commodi corrupti, temporibus non quam.</p>
+
+            <div class="contact text-left">
+                <div class="form">
+                    <h6 class="subtitle">Available 24/7</h6>
+                    <h6 class="section-title mb-4">Get In Touch</h6>
+                    <form>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="contact-message" id="" cols="30" rows="5" class="form-control" placeholder="Message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block rounded w-lg">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-infos">
+                    <div class="item">
+                        <i class="ti-location-pin"></i>
+                        <div class="">
+                            <h5>Location</h5>
+                            <p> 12345 Fake ST NoWhere AB Country</p>
+                        </div>                          
+                    </div>
+                    <div class="item">
+                        <i class="ti-mobile"></i>
+                        <div>
+                            <h5>Phone Number</h5>
+                            <p>(123) 456-7890</p>
+                        </div>                          
+                    </div>
+                    <div class="item">
+                        <i class="ti-email"></i>
+                        <div class="mb-0">
+                            <h5>Email Address</h5>
+                            <p>info@website.com</p>
+                        </div>
+                    </div>
+                </div>                  
+            </div>
+        </div>  
+        <div id="map">
+            <iframe src="https://snazzymaps.com/embed/61257"></iframe>
+        </div>      
+    </section>
+    <!-- End of Contact Section -->
+
+    <!-- Page Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <p>Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com" target="_blank">DevCRUD</a></p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="socials">
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-facebook"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-google"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-github"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> 
+    <!-- End of page footer -->
+	<script>
+        // DOM Elements
+        const desktop = document.getElementById('desktop');
+        const icons = document.querySelectorAll('.icon');
+        const chatBox = document.getElementById('chatBox');
+        const chatTitle = document.getElementById('chatTitle');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const closeChat = document.getElementById('closeChat');
+        
+        let activeForm = null;
+        let isDragging = false;
+        let offsetX, offsetY;
+    
+        // Make icons draggable
+        icons.forEach(icon => {
+          icon.addEventListener('mousedown', startDrag);
+          icon.addEventListener('click', openChat);
+        });
+    
+        function startDrag(e) {
+          // Prevent default to avoid text selection during drag
+          e.preventDefault();
+          
+          // Get the current icon
+          const icon = e.currentTarget;
+          
+          // Calculate the offset of the mouse pointer relative to the icon
+          const rect = icon.getBoundingClientRect();
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
+          
+          // Set dragging state
+          isDragging = true;
+          
+          // Add event listeners for dragging
+          document.addEventListener('mousemove', drag);
+          document.addEventListener('mouseup', stopDrag);
+          
+          // Add a class to indicate dragging
+          icon.style.zIndex = "100";
+        }
+    
+        function drag(e) {
+          if (!isDragging) return;
+          
+          // Get the icon that's being dragged (the one with z-index 100)
+          const icon = document.querySelector('.icon[style*="z-index: 100"]');
+          if (!icon) return;
+          
+          // Calculate the new position
+          const x = e.clientX - offsetX;
+          const y = e.clientY - offsetY;
+          
+          // Set the new position
+          icon.style.left = `${x}px`;
+          icon.style.top = `${y}px`;
+          
+          // Prevent opening chat when dragging
+          icon.dragged = true;
+        }
+    
+        function stopDrag() {
+          // Reset dragging state
+          isDragging = false;
+          
+          // Get the icon that was being dragged
+          const icon = document.querySelector('.icon[style*="z-index: 100"]');
+          if (icon) {
+            icon.style.zIndex = "";
+            
+            // Set a timeout to reset the dragged flag
+            setTimeout(() => {
+              icon.dragged = false;
+            }, 100);
+          }
+          
+          // Remove event listeners
+          document.removeEventListener('mousemove', drag);
+          document.removeEventListener('mouseup', stopDrag);
+        }
+    
+        function openChat(e) {
+          // Don't open chat if the icon was being dragged
+          if (e.currentTarget.dragged) return;
+          
+          // Get the form ID from the data attribute
+          const formId = e.currentTarget.dataset.form;
+          const formName = e.currentTarget.querySelector('.icon-label').textContent;
+          
+          // Set the active form
+          activeForm = formId;
+          
+          // Update the chat title
+          chatTitle.textContent = formName;
+          
+          // Clear existing messages
+          chatMessages.innerHTML = '';
+          
+          // Add welcome message
+          addMessage(`Welcome to ${formName}! How can I help you today?`, 'system');
+          
+          // Show the chat box
+          chatBox.classList.add('open');
+        }
+    
+        // Close chat
+        closeChat.addEventListener('click', () => {
+          chatBox.classList.remove('open');
+          activeForm = null;
+        });
+    
+        // Send message
+        sendMessageBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        });
+    
+        async function sendMessage() {
+          const message = messageInput.value.trim();
+          if (!message || !activeForm) return;
+          
+          // Add user message
+          addMessage(message, 'user');
+
+          let textmessage = await chatquery(message).then(msg => {
+                // Add system response
+                addMessage(`AI Bot: "${msg}" `);
+
+          });
+            
+         
+          
+          // Clear input
+          messageInput.value = '';
+        }
+
+        async function chatquery(querytext) {
+            const formData = {
+                text: querytext, 
+            };
+            let data = "";
+            let msg="-";
+            try {
+                const response = await fetch('/queryai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then( async res => {  
+                    console.log("here is respons in call back ");console.log(res);
+                    data =  await res.json();
+                    msg = (JSON.parse(data.data)).result.response;
+                    console.log("typeof data !== 'undefined'")
+                    // console.log(msg);
+                    if(typeof data !== 'undefined'){
+                       return msg;
+                    }  
+                    console.log("here is respons in call back ");console.log(res);
+                });
+                
+                   
+               
+            } catch (error) {
+                console.log(error);
+                return "error"
+            }
+            console.log("response return ===+");
+           
+            console.log("msg++");
+            console.log(msg); 
+            while(msg =="-"  ){
+                setTimeout(function() {  console.log("--");}, 3000);                 
+            }
+            return msg;
+        }
+     
+            
+        function addMessage(text, sender) {
+          // Create message container
+          const messageContainer = document.createElement('div');
+          messageContainer.className = `message-container ${sender}`;
+          
+          // Create message element
+          const messageElement = document.createElement('div');
+          messageElement.className = `message ${sender}-message`;
+          
+          // Add message text
+          const messageText = document.createElement('p');
+          messageText.textContent = text;
+          messageElement.appendChild(messageText);
+          
+          // Add timestamp
+          const timestamp = document.createElement('div');
+          timestamp.className = 'timestamp';
+          timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          messageElement.appendChild(timestamp);
+          
+          // Add message to container
+          messageContainer.appendChild(messageElement);
+          
+          // Add to chat
+          chatMessages.appendChild(messageContainer);
+          
+          // Scroll to bottom
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      </script>
+	<!-- core  -->
+    <script src="theme/assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="theme/assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+    <!-- bootstrap 3 affix -->
+	<script src="theme/assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- steller js -->
+    <script src="theme/assets/js/steller.js"></script>
+
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Form Management System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>User Form Management System</h1>
+      <nav>
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/login.html">Login</a></li>
+          <li><a href="/register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Welcome to the Form Management System</h2>
+      <p>Create, manage, and organize your forms in one place.</p>
+      <div class="cta-buttons">
+        <a href="/register.html" class="btn btn-primary">Get Started</a>
+        <a href="/login.html" class="btn btn-secondary">Login</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>User Authentication</h3>
+          <p>Secure login and registration with email verification.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Form Management</h3>
+          <p>Create, edit, and delete forms with ease.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Draft System</h3>
+          <p>Save forms as drafts and publish when ready.</p>
+        </div>
+        <div class="feature-card">
+          <h3>User Profiles</h3>
+          <p>Manage your personal information and preferences.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Form Management System. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html> -->

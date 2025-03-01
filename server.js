@@ -75,16 +75,35 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-// Routes
-app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'index.html'));
-});
-
+ 
 app.get('/register', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'register.html'));
+
+   res.sendFile(join(__dirname, 'public', 'register.html'));
 });
 
-
+app.post('/queryai', (req, res) => {
+  const { text } = req.body;
+  // let text = "What are the section of one page lean buisness plan";
+  runaiquery("@cf/meta/llama-3-8b-instruct", {
+          messages: [
+              {
+              role: "system",
+              content: "You are a friendly assistan that helps answer topics on creating  lean canvas plan,business plan any business related knowledge",
+              },
+              {
+              role: "user",
+              content:
+                  text,      
+              },
+          ],
+      }).then((response) => {
+        console.log("query ai worker");
+          console.log(JSON.stringify(response));
+          // return JSON.stringify(response);
+          return res.status(200).json({ data: JSON.stringify(response) });
+    });
+  // res.sendFile(join(__dirname, 'public', 'register.html'));
+});
 
 
 app.get('/dashboard', (req, res) => {
@@ -441,6 +460,24 @@ app.delete('/api/forms/:id', authenticateUser, async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+
+async function runaiquery(model, input) {
+      const response = await fetch(
+          `https://api.cloudflare.com/client/v4/accounts/9d8cf0bed724c974cfd216a9e2eafcb6/ai/run/${model}`,
+          {
+          headers: { Authorization: "Bearer KgG9F7VJLE0tgkrVW2DslW4yVTy_orBcYkWkMkmJ" },
+          method: "POST",
+          body: JSON.stringify(input),
+          }
+      );
+      const result = await response.json();
+      return result;
+  }
+
+
+
 
 // Database initialization script
 const initializeDatabase = async () => {
