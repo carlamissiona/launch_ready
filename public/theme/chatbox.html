@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktop Interface</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      height: 100vh;
+      overflow: hidden;
+      color: #2c3e50;
+    }
+
+    /* Desktop styles */
+    .desktop {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      padding: 4rem;
+    }
+
+    /* Icon styles */
+    .icons-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      width: max-content;
+    }
+
+    .icon {
+      cursor: grab;
+      position: absolute;
+      user-select: none;
+      z-index: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .icon:active {
+      cursor: grabbing;
+    }
+
+    .icon:hover {
+      transform: scale(1.05);
+    }
+
+    .icon-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .icon-box:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .icon-label {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    .form1 {
+      background-color: #ebf5fe;
+      left: 4rem;
+      top: 4rem;
+    }
+
+    .form2 {
+      background-color: #e6fcf5;
+      left: 12rem;
+      top: 4rem;
+    }
+
+    .form3 {
+      background-color: #f3e8ff;
+      left: 20rem;
+      top: 4rem;
+    }
+
+    /* Chat box styles */
+    .chat-box {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 35%;
+      background-color: #ffffff;
+      border-left: 1px solid #e2e8f0;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .chat-box.open {
+      transform: translateX(0);
+    }
+
+    .chat-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+      background-color: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #2c3e50;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .close-button:hover {
+      background-color: #e2e8f0;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 80%;
+      border-radius: 18px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .message p {
+      margin-bottom: 0.5rem;
+    }
+
+    .message .timestamp {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .system-message {
+      background-color: #f1f5f9;
+      align-self: flex-start;
+    }
+
+    .user-message {
+      background-color: #3498db;
+      color: white;
+      margin-left: auto;
+    }
+
+    .message-container {
+      display: flex;
+      margin-bottom: 1.5rem;
+    }
+
+    .message-container.user {
+      justify-content: flex-end;
+    }
+
+    .chat-input {
+      padding: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .message-input {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .message-input:focus {
+      border-color: #3498db;
+    }
+
+    .send-button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .send-button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Icon SVGs */
+    .icon-svg {
+      width: 50px;
+      height: 50px;
+      stroke: #34495e;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .send-svg {
+      width: 20px;
+      height: 20px;
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .close-svg {
+      width: 24px;
+      height: 24px;
+      stroke: #64748b;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop" id="desktop">
+    <!-- Icons -->
+    <div class="icons-container">
+      <div class="icon" data-form="form1">
+        <div class="icon-box form1">
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <line x1="10" y1="9" x2="8" y2="9"></line>
+          </svg>
+        </div>
+        <p class="icon-label">Form 1</p>
+      </div>
+      
+      <div class="icon" data-form="form2">
+        <div class="icon-box form2">
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <line x1="10" y1="9" x2="8" y2="9"></line>
+          </svg>
+        </div>
+        <p class="icon-label">Form 2</p>
+      </div>
+      
+      <div class="icon" data-form="form3">
+        <div class="icon-box form3">
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <line x1="10" y1="9" x2="8" y2="9"></line>
+          </svg>
+        </div>
+        <p class="icon-label">Form 3</p>
+      </div>
+    </div>
+
+    <!-- Chat Box -->
+    <div class="chat-box" id="chatBox">
+      <div class="chat-header">
+        <h2 class="chat-title" id="chatTitle">Form</h2>
+        <button class="close-button" id="closeChat">
+          <svg class="close-svg" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be added here dynamically -->
+      </div>
+      
+      <div class="chat-input">
+        <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+        <button class="send-button" id="sendMessage">
+          <svg class="send-svg" viewBox="0 0 24 24">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const desktop = document.getElementById('desktop');
+    const icons = document.querySelectorAll('.icon');
+    const chatBox = document.getElementById('chatBox');
+    const chatTitle = document.getElementById('chatTitle');
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessage');
+    const closeChat = document.getElementById('closeChat');
+    
+    let activeForm = null;
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    // Make icons draggable
+    icons.forEach(icon => {
+      icon.addEventListener('mousedown', startDrag);
+      icon.addEventListener('click', openChat);
+    });
+
+    function startDrag(e) {
+      // Prevent default to avoid text selection during drag
+      e.preventDefault();
+      
+      // Get the current icon
+      const icon = e.currentTarget;
+      
+      // Calculate the offset of the mouse pointer relative to the icon
+      const rect = icon.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      
+      // Set dragging state
+      isDragging = true;
+      
+      // Add event listeners for dragging
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', stopDrag);
+      
+      // Add a class to indicate dragging
+      icon.style.zIndex = "100";
+    }
+
+    function drag(e) {
+      if (!isDragging) return;
+      
+      // Get the icon that's being dragged (the one with z-index 100)
+      const icon = document.querySelector('.icon[style*="z-index: 100"]');
+      if (!icon) return;
+      
+      // Calculate the new position
+      const x = e.clientX - offsetX;
+      const y = e.clientY - offsetY;
+      
+      // Set the new position
+      icon.style.left = `${x}px`;
+      icon.style.top = `${y}px`;
+      
+      // Prevent opening chat when dragging
+      icon.dragged = true;
+    }
+
+    function stopDrag() {
+      // Reset dragging state
+      isDragging = false;
+      
+      // Get the icon that was being dragged
+      const icon = document.querySelector('.icon[style*="z-index: 100"]');
+      if (icon) {
+        icon.style.zIndex = "";
+        
+        // Set a timeout to reset the dragged flag
+        setTimeout(() => {
+          icon.dragged = false;
+        }, 100);
+      }
+      
+      // Remove event listeners
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
+    }
+
+    function openChat(e) {
+      // Don't open chat if the icon was being dragged
+      if (e.currentTarget.dragged) return;
+      
+      // Get the form ID from the data attribute
+      const formId = e.currentTarget.dataset.form;
+      const formName = e.currentTarget.querySelector('.icon-label').textContent;
+      
+      // Set the active form
+      activeForm = formId;
+      
+      // Update the chat title
+      chatTitle.textContent = formName;
+      
+      // Clear existing messages
+      chatMessages.innerHTML = '';
+      
+      // Add welcome message
+      addMessage(`Welcome to ${formName}! How can I help you today?`, 'system');
+      
+      // Show the chat box
+      chatBox.classList.add('open');
+    }
+
+    // Close chat
+    closeChat.addEventListener('click', () => {
+      chatBox.classList.remove('open');
+      activeForm = null;
+    });
+
+    // Send message
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message || !activeForm) return;
+      
+      // Add user message
+      addMessage(message, 'user');
+      
+      // Add system response
+      addMessage(`You said: "${message}" in ${chatTitle.textContent}`, 'system');
+      
+      // Clear input
+      messageInput.value = '';
+    }
+
+    function addMessage(text, sender) {
+      // Create message container
+      const messageContainer = document.createElement('div');
+      messageContainer.className = `message-container ${sender}`;
+      
+      // Create message element
+      const messageElement = document.createElement('div');
+      messageElement.className = `message ${sender}-message`;
+      
+      // Add message text
+      const messageText = document.createElement('p');
+      messageText.textContent = text;
+      messageElement.appendChild(messageText);
+      
+      // Add timestamp
+      const timestamp = document.createElement('div');
+      timestamp.className = 'timestamp';
+      timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      messageElement.appendChild(timestamp);
+      
+      // Add message to container
+      messageContainer.appendChild(messageElement);
+      
+      // Add to chat
+      chatMessages.appendChild(messageContainer);
+      
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  </script>
+</body>
+</html>

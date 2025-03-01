@@ -80,6 +80,13 @@ app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/register', (req, res) => {
+  res.sendFile(join(__dirname, 'public', 'register.html'));
+});
+
+
+
+
 app.get('/dashboard', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'dashboard.html'));
 });
@@ -131,6 +138,7 @@ app.post('/api/register', async (req, res) => {
     }
     
     // Send verification email
+    /**
     const verificationUrl = `http://${req.headers.host}/api/verify?token=${verificationToken}`;
     
     const mailOptions = {
@@ -150,9 +158,9 @@ app.post('/api/register', async (req, res) => {
       } else {
         console.log('Verification email sent:', info.response);
       }
-    });
+    }); **/
     
-    res.status(201).json({ message: 'User registered successfully. Please check your email for verification.' });
+    res.status(201).json({ message: 'User registered successfully.' });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ error: 'Server error' });
