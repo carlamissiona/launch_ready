@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with Steller landing page.">
     <meta name="author" content="Devcrud">
-    <title>Steller Landing page | Free Bootstrap 4.1 landing page</title>
+    <title></title>
     <!-- font icons -->
     <link rel="stylesheet" href="theme/assets/vendors/themify-icons/css/themify-icons.css">
     <!-- Bootstrap + Steller main styles -->
@@ -275,7 +275,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" data-spy="affix" data-offset-top="0">
         <div class="container">
            <!--- <a class="navbar-brand" href="#"><img src="theme/assets/imgs/logo.svg" alt=""></a> -->
-<h4>Launch Ready</h4>
+           <h4>	<%- page.title %> </h4>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -326,6 +326,10 @@
    
            <div class="desktop" id="desktop" style="max-height:300px;">
                 <!-- Icons -->
+                <% for (let i = 0; i < (page.bplans).length; i++) { %>
+                    <%= page.bplans[i].title %>
+                    <%= page.bplans[i].image %>
+                <% } %>
                 <div class="icons-container">
                 <div class="icon f1" data-form="form1">
                     <div class="icon-box form1">

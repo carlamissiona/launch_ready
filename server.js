@@ -1,6 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, join  } from 'path';
+import { readFile } from 'fs';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import pg from 'pg';
@@ -8,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
+ 
 
 // Load environment variables
 dotenv.config();
@@ -24,6 +26,8 @@ const __dirname = dirname(__filename);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.set('view engine', 'ejs');
 app.use(express.static(join(__dirname, 'public')));
 
 // Initialize PostgreSQL client
@@ -63,22 +67,38 @@ const authenticateUser = (req, res, next) => {
   const token = req.cookies.token;
   
   if (!token) {
-    return res.status(401).json({ error: 'Unauthorized: No token provided' });
+    // return res.status(401).json({ error: 'Unauthorized: No token provided' });
+    res.redirect('/login.html');
   }
   
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("user id user id @ middleware ");
     req.user = decoded;
+    console.log( req.user );
+    console.log("user id user id-----------");
+     
     next();
   } catch (error) {
+    // If token is invalid then logout na theres eror msg = Cannot set headers after they are sent to the client
     return res.status(401).json({ error: 'Unauthorized: Invalid token' });
   }
+
 };
 
  
 app.get('/register', (req, res) => {
-
    res.sendFile(join(__dirname, 'public', 'register.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(join(__dirname, 'public', 'login.html'));
+});
+
+
+app.get('/',  (req, res) => {
+   res.sendFile(join(__dirname, 'public', 'index.html'));
+     
 });
 
 app.post('/queryai', (req, res) => {
@@ -106,8 +126,9 @@ app.post('/queryai', (req, res) => {
 });
 
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard',authenticateUser, (req, res) => {
   res.sendFile(join(__dirname, 'public', 'dashboard.html'));
+//
 });
 
 // User registration
@@ -284,6 +305,7 @@ app.post('/api/login', async (req, res) => {
 
 // User logout
 app.post('/api/logout', authenticateUser, async (req, res) => {
+
   try {
     // Clear login session in database
     await pool.query(
@@ -301,8 +323,14 @@ app.post('/api/logout', authenticateUser, async (req, res) => {
   }
 });
 
+
+
 // Get user profile
 app.get('/api/profile', authenticateUser, async (req, res) => {
+  console.log("profile =");
+  console.log("profile =");
+  console.log(req.body);
+  
   try {
     const result = await pool.query(
       'SELECT uuid, fullname, email, address, city, bio, paid_user FROM users WHERE uuid = $1',
@@ -326,7 +354,8 @@ app.get('/api/profile', authenticateUser, async (req, res) => {
 app.put('/api/profile', authenticateUser, async (req, res) => {
   try {
     const { fullname, address, city, bio } = req.body;
-    
+    console.log(req.body);
+
     const result = await pool.query(
       `UPDATE users 
        SET fullname = $1, address = $2, city = $3, bio = $4, updated_at = NOW() 
@@ -528,3 +557,86 @@ initializeDatabase();
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// functions
+app.get('/answer/form',  authenticateUser , async (req, res) => {
+  
+  const dbres = await pool.query('SELECT * FROM forms WHERE user_id::text = $1', [req.user.id]);
+  // SELECT * FROM example_table WHERE id::text = '123e4567-e89b-12d3-a456-426614174000';
+  let formshtml = "-" ;
+  console.log("formshtml");
+  //  res.rows[0][data];
+  console.log( dbres.rowCount );
+  if( dbres.rowCount == 0 ){
+      formshtml = "No forms found"
+  }else{
+    console.log(dbres.rows[0].formcontent);
+    formshtml = dbres.rows[0].formcontent;
+  }
+console.log("======formshtml");
+console.log(formshtml);
+  let data = {
+    title: 'Form',
+    forms: formshtml,
+  };
+
+	res.render('add_form', {
+		page: data,
+	});
+
+});
+
+app.get('/home', async (req, res) => {
+    
+  //get businessplans
+  //get apps
+  //get courses 
+  //forms answered
+   // Check if user already exists
+   const bplan = await pool.query('SELECT * FROM forms' );
+   const apps = await pool.query('SELECT *  FROM forms' );
+   const forms = await pool.query('SELECT *  FROM forms' );
+   
+
+
+   let plans = [{
+    title: 'Bplan1',
+    image: 'A computer science portal for geeks image',
+    bplans: 'https://www.geeksforgeeks.org/',
+  }, 
+  {
+
+    title: 'Bplan2',
+    image: 'A computer science portal for geeks image',
+    bplans: 'https://www.geeksforgeeks.org/',
+  }
+];
+
+let saasapp = [{
+  title: 'App',
+  image: 'A computer science portal for geeks image',
+  bplans: 'https://www.geeksforgeeks.org/',
+}, 
+{
+
+  title: 'App2',
+  image: 'A computer science portal for geeks image',
+  bplans: 'https://www.geeksforgeeks.org/',
+}
+];
+
+
+  let data = {
+    title: 'Home',
+    forms: 'A computer science portal for geeks',
+    bplans: plans,
+    apps: saasapp,
+  };
+
+	res.render('home', {
+		page: data,
+	});
+
+});
+
+ 
