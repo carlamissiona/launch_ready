@@ -65,7 +65,6 @@
                      <div class="pl-md-4">
                         <br><br>
                         <h6 class="title"> Unesccape variable </h6>
-                        <p class="subtitle">UI/UX Designer<%- page.forms %> </p>
                         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, pariatur, aperiam aut autem voluptas odit. Odio ducimus delectus totam sed aliquam sequi praesentium mollitia, illum repudiandae quidem quod, magni magnam.</p>
                         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, pariatur, aperiam aut autem voluptas odit. Odio ducimus delectus totam sed aliquam sequi praesentium mollitia, illum repudiandae quidem quod, magni magnam.</p>
                         <button class="btn btn-primary rounded mt-3">DOWNLOAD CV</button>                   
@@ -73,59 +72,60 @@
                   </div>
                </div>
                <div class="col-lg-7 col-sm-12" id="form-db">
-                <br><br><br><br>
+                
+                  <br><br><br><br>
                   <!-- Start of form inputs -->  
                   <h4>One Page Business Plan</h4>
                   <hr>
-                  <div >
-                     <form id="registerForm">
+                  <div>
+                     <form id="saveformForm">
                         <div class="form-group">
-                           <h6 class="section-secondary-title" > Executive Summary</h6>
+                           <h6 class="section-secondary-title"> Executive Summary</h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="esummary" name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title" > Company Overview</h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="coverview" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title" > Market Research</h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="mresearch" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control"  id="mresearch" name="mresearch" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title" > Products/Services</h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control"  id="productser" name="productser" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="marketingstrat" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title" > Business Model</h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="bmodel" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title"> Financials </h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="financialplan" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <div class="form-group">
                            <h6 class="section-secondary-title"> Operational Plan </h6>
                         </div>
                         <div class="form-group">
-                           <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
+                           <textarea class="form-control" id="operationalplan" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button><br><br>
                      </form>
@@ -168,24 +168,32 @@
       <!--Site Registration Message js--->
       <script>
          document.addEventListener('DOMContentLoaded', () => {
-           const registerForm = document.getElementById('registerForm');
+           const registerForm = document.getElementById('saveformForm');
            const messageDiv = document.getElementById('message');
+ 
          
            registerForm.addEventListener('submit', async (e) => {
              e.preventDefault();
              
-             const password = document.getElementById('password').value;
-             const confirmPassword = document.getElementById('confirmPassword').value;
-             
-             if (password !== confirmPassword) {
-               showMessage('Passwords do not match', 'error');
-               return;
-             }
              console.log("form");
+
+            
              console.log(document.getElementById('form-db').innerHTML);
+             console.log("-");
+             document.getElementById('financialplan').setAttribute("value" , document.getElementById('financialplan').value);
+             document.getElementById('operationalplan').setAttribute("value" , document.getElementById('operationalplan').value);
+             //  document.getElementById('coverview').setAttribute("value", document.getElementById('overview').value);
+             const formshtml= document.getElementById('form-db').innerHTML;
+             console.log("document.getElementById('overview').value ");
+             console.log(document.getElementById('coverview').value );
+             console.log(document.getElementById('esummary').value );
+             console.log(document.getElementById('coverview').value );
+             console.log("formshtml");
+             console.log(formshtml);
              const formData = {
-               formtext: "form" ,
-               
+               formcontent: formshtml,          
+               type: "One Page Business Plan",
+               description: "-",
              };
              
              try {
@@ -198,9 +206,12 @@
                });
                
                const data = await response.json();
+               console.log("await data");
                
                if (response.ok) {
                  showMessage(data.message, 'success');
+                 console.log("await data");
+                 console.log(data);
                  registerForm.reset();
                } else {
                  showMessage(data.error, 'error');

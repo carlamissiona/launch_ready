@@ -378,15 +378,18 @@ app.put('/api/profile', authenticateUser, async (req, res) => {
 // FORM CRUD OPERATIONS
 
 // Create form
-app.post('/api/forms', authenticateUser, async (req, res) => {
+app.post('/api/addform', authenticateUser, async (req, res) => {
+  let isdraft = false;
   try {
-    const { description, type, formcontent, isDraft } = req.body;
+    const { description, type, formcontent } = req.body;
+    console.log("req.body==========++++++");
+    console.log(req.body);
     
     const result = await pool.query(
-      `INSERT INTO forms (uuid, user_id, description, type, formcontent, isdraft)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO forms (uuid, user_id, description, type, formcontent)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [uuidv4(), req.user.id, description, type, formcontent, isDraft || true]
+      [uuidv4(), req.user.id, description, type, formcontent]
     );
     
     res.status(201).json({ message: 'Form created successfully', form: result.rows[0] });
@@ -563,21 +566,23 @@ app.get('/answer/form',  authenticateUser , async (req, res) => {
   
   const dbres = await pool.query('SELECT * FROM forms WHERE user_id::text = $1', [req.user.id]);
   // SELECT * FROM example_table WHERE id::text = '123e4567-e89b-12d3-a456-426614174000';
-  let formshtml = "-" ;
+  let formshtml = "-" ; let hasform = true;
   console.log("formshtml");
-  //  res.rows[0][data];
-  console.log( dbres.rowCount );
+
   if( dbres.rowCount == 0 ){
-      formshtml = "No forms found"
+      hasform = false;
+      formshtml = `<div class="col-lg-7 col-sm-12" id="form-db"> <br><br><br><br> <!-- Start of form inputs --> <h4>One Page Business Plan</h4> <hr> <div > <form id="saveformForm"> <div class="form-group"> <h6 class="section-secondary-title" > Executive Summarys</h6> </div> <div class="form-group"> <textarea class="form-control"  name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Company Overview</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Market Research</h6> </div> <div class="form-group"> <textarea class="form-control"  name="mresearch" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Products/Services</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Business Model</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Financials </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Operational Plan </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <button type="submit" class="btn btn-primary">Submit</button><br><br> </form> </div> </div>`;
   }else{
     console.log(dbres.rows[0].formcontent);
     formshtml = dbres.rows[0].formcontent;
   }
-console.log("======formshtml");
-console.log(formshtml);
+  console.log("======formshtml");
+  console.log(formshtml);
+  
   let data = {
     title: 'Form',
     forms: formshtml,
+    hasForm: hasform,
   };
 
 	res.render('add_form', {
@@ -588,17 +593,15 @@ console.log(formshtml);
 
 app.get('/home', async (req, res) => {
     
-  //get businessplans
-  //get apps
-  //get courses 
-  //forms answered
+   //get businessplans
+   //get apps
+   //get courses 
+   //forms answered
    // Check if user already exists
    const bplan = await pool.query('SELECT * FROM forms' );
    const apps = await pool.query('SELECT *  FROM forms' );
    const forms = await pool.query('SELECT *  FROM forms' );
    
-
-
    let plans = [{
     title: 'Bplan1',
     image: 'A computer science portal for geeks image',
@@ -610,19 +613,20 @@ app.get('/home', async (req, res) => {
     image: 'A computer science portal for geeks image',
     bplans: 'https://www.geeksforgeeks.org/',
   }
-];
+ ];
 
-let saasapp = [{
-  title: 'App',
-  image: 'A computer science portal for geeks image',
-  bplans: 'https://www.geeksforgeeks.org/',
-}, 
-{
+let saasapp = [
+  {
+    title: 'App',
+    image: 'A computer science portal for geeks image',
+    bplans: 'https://www.geeksforgeeks.org/',
+  }, 
+  {
 
-  title: 'App2',
-  image: 'A computer science portal for geeks image',
-  bplans: 'https://www.geeksforgeeks.org/',
-}
+    title: 'App2',
+    image: 'A computer science portal for geeks image',
+    bplans: 'https://www.geeksforgeeks.org/',
+  }
 ];
 
 
