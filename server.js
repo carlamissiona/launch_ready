@@ -31,17 +31,51 @@ app.set('view engine', 'ejs');
 app.use(express.static(join(__dirname, 'public')));
 
 // Initialize PostgreSQL client
-const { Pool } = pg;
+ const { Pool } = pg;
+// const pool = new Pool({
+//   user: "admin",
+//   host: "dpg-cugqr723esus73fg1egg-a.oregon-postgres.render.com",
+//   database: "launch_db",
+//   password: "yaHa2t9CtHNJBS1jKhn2Mzke5Jvca3PM",
+//   port: 5432,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
+// });
+
+
+// Init db with vercel
+
 const pool = new Pool({
-  user: "admin",
-  host: "dpg-cugqr723esus73fg1egg-a.oregon-postgres.render.com",
-  database: "launch_db",
-  password: "yaHa2t9CtHNJBS1jKhn2Mzke5Jvca3PM",
-  port: 5432,
+  connectionString: "postgres://neondb_owner:npg_WchXtT1gAON6@ep-wild-feather-a1sy6csv-pooler.ap-southeast-1.aws.neon.tech/neondb",
   ssl: {
     rejectUnauthorized: false,
   },
 });
+
+// async function getData() {
+//   const client = await pool.connect();
+//   try {
+//     const { rows } = await client.query('SELECT * FROM posts');
+//     return rows;
+//   } finally {
+//     client.release();
+//   }
+// }
+
+// export default async function Page() {
+//   const data = await getData();
+//   return (
+//     <div>
+//       {data.map((post, index) => (
+//         <div key={index}>
+//           <h2>{post.title}</h2>
+//           <p>{post.content}</p>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
 
 // Test database connection
 pool.connect((err, client, release) => {
@@ -379,7 +413,7 @@ app.put('/api/profile', authenticateUser, async (req, res) => {
 
 // Create form
 app.post('/api/addform', authenticateUser, async (req, res) => {
-  let isdraft = false;
+
   try {
     const { description, type, formcontent } = req.body;
     console.log("req.body==========++++++");
@@ -392,6 +426,9 @@ app.post('/api/addform', authenticateUser, async (req, res) => {
       [uuidv4(), req.user.id, description, type, formcontent]
     );
     
+    console.log("result");
+    console.log(result);
+
     res.status(201).json({ message: 'Form created successfully', form: result.rows[0] });
   } catch (error) {
     console.error('Create form error:', error);
@@ -562,7 +599,7 @@ app.listen(PORT, () => {
 });
 
 // functions
-app.get('/answer/form',  authenticateUser , async (req, res) => {
+app.get('/answer/one-page',  authenticateUser , async (req, res) => {
   
   const dbres = await pool.query('SELECT * FROM forms WHERE user_id::text = $1', [req.user.id]);
   // SELECT * FROM example_table WHERE id::text = '123e4567-e89b-12d3-a456-426614174000';
@@ -571,12 +608,14 @@ app.get('/answer/form',  authenticateUser , async (req, res) => {
 
   if( dbres.rowCount == 0 ){
       hasform = false;
-      formshtml = `<div class="col-lg-7 col-sm-12" id="form-db"> <br><br><br><br> <!-- Start of form inputs --> <h4>One Page Business Plan</h4> <hr> <div > <form id="saveformForm"> <div class="form-group"> <h6 class="section-secondary-title" > Executive Summarys</h6> </div> <div class="form-group"> <textarea class="form-control"  name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Company Overview</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Market Research</h6> </div> <div class="form-group"> <textarea class="form-control"  name="mresearch" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Products/Services</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Business Model</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Financials </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Operational Plan </h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea> </div> <button type="submit" class="btn btn-primary">Submit</button><br><br> </form> </div> </div>`;
+      console.log("(document.getElementById('bmodel').value).length == 0" );
+      formshtml = `<br><br><br><br> <!-- Start of form inputs --> <h4>One Page Business Plan</h4> <hr> <div > <form id="saveformForm"> <div class="form-group"> <h6 class="section-secondary-title" > Executive Summarys</h6> </div> <div class="form-group"> <textarea class="form-control" id="esummary" name="esummary" value="-" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Company Overview</h6> </div> <div class="form-group"> <textarea class="form-control"  name="coverview" id="coverview" value="-" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Market Research</h6> </div> <div class="form-group"> <textarea class="form-control" id="mresearch" name="mresearch" value="-"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Products/Services</h6> </div> <div class="form-group"> <textarea class="form-control"  id="productser" value="-" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6> </div> <div class="form-group"> <textarea class="form-control"  id="marketingstrat" value="-" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title" > Business Model</h6> </div> <div class="form-group"> <textarea class="form-control" id="bmodel" name="bmodel" value="-"  placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Financials </h6> </div> <div class="form-group"> <textarea class="form-control" value="-" id="financialplan" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <div class="form-group"> <h6 class="section-secondary-title"> Operational Plan </h6> </div> <div class="form-group"> <textarea class="form-control" value="-"  id ="operationalplan" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"></textarea> </div> <button type="submit" class="btn btn-primary">Submit</button><br><br> </form> </div> `;
   }else{
     console.log(dbres.rows[0].formcontent);
     formshtml = dbres.rows[0].formcontent;
   }
   console.log("======formshtml");
+  
   console.log(formshtml);
   
   let data = {

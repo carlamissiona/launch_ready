@@ -59,77 +59,21 @@
           
             <div class="row">
                
-               <div class="col-lg-5" style="padding-right:100px;">
+               <div class="col-lg-6" style="padding-right:100px;">
                 <br><br><br>
                   <div class="row text-center text-md-left">
                      <div class="pl-md-4">
                         <br><br>
-                        <h6 class="title"> Unesccape variable </h6>
-                        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, pariatur, aperiam aut autem voluptas odit. Odio ducimus delectus totam sed aliquam sequi praesentium mollitia, illum repudiandae quidem quod, magni magnam.</p>
-                        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident, pariatur, aperiam aut autem voluptas odit. Odio ducimus delectus totam sed aliquam sequi praesentium mollitia, illum repudiandae quidem quod, magni magnam.</p>
-                        <button class="btn btn-primary rounded mt-3">DOWNLOAD CV</button>                   
+                        <h6 class="title"> How To Write A Business Plan</h6>
+                        <p class="text-justify"> <br>Writing a one-page business plan is a great way to clearly communicate your business idea, goals, and strategy in a concise and efficient manner. It's especially useful for startups, entrepreneurs, and small businesses who need to convey their vision without overwhelming investors or stakeholders with lengthy documents.
+
+                           Here’s a guide on how to write a one-page business plan:</p>
+                        <button class="btn btn-primary rounded mt-3">Check The Guide</button>                   
                      </div>
                   </div>
                </div>
-               <div class="col-lg-7 col-sm-12" id="form-db">
-                
-                  <br><br><br><br>
-                  <!-- Start of form inputs -->  
-                  <h4>One Page Business Plan</h4>
-                  <hr>
-                  <div>
-                     <form id="saveformForm">
-                        <div class="form-group">
-                           <h6 class="section-secondary-title"> Executive Summary</h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="esummary" name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title" > Company Overview</h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="coverview" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title" > Market Research</h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control"  id="mresearch" name="mresearch" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title" > Products/Services</h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control"  id="productser" name="productser" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="marketingstrat" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title" > Business Model</h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="bmodel" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title"> Financials </h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="financialplan" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <div class="form-group">
-                           <h6 class="section-secondary-title"> Operational Plan </h6>
-                        </div>
-                        <div class="form-group">
-                           <textarea class="form-control" id="operationalplan" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> </textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button><br><br>
-                     </form>
-                  </div>
+               <div class="col-lg-6 col-sm-12" id="form-db">
+                  <%- page.forms  %>
                </div>
                <!-- end of form inputs -->   
             </div>
@@ -168,34 +112,124 @@
       <!--Site Registration Message js--->
       <script>
          document.addEventListener('DOMContentLoaded', () => {
-           const registerForm = document.getElementById('saveformForm');
+            console.log("(document.getElementById('bmodel').value).length == 0" );
+            console.log(document.getElementById('bmodel') );
+           if((document.getElementById('bmodel').value).length == 0 ){
+               document.getElementById('bmodel').value = "-";
+           } 
+
+           if((document.getElementById('esummary').value).length == 0 ){
+               document.getElementById('esummary').value = "-";
+           } 
+
+           if((document.getElementById('coverview').value).length == 0 ){
+               document.getElementById('coverview').value = "-";
+           } 
+
+
+           if((document.getElementById('financialplan').value).length == 0 ){
+               document.getElementById('financialplan').value = "-";
+           } 
+
+
+           if((document.getElementById('operationalplan').value).length == 0 ){
+               document.getElementById('operationalplan').value = "-";
+           } 
+
+           if((document.getElementById('productser').value).length == 0 ){
+               document.getElementById('productser').value = "-";
+           } 
+
+
+           if((document.getElementById('mresearch').value).length == 0 ){
+               document.getElementById('mresearch').value = "-";
+           } 
+
+           if((document.getElementById('marketingstrat').value).length == 0 ){
+               document.getElementById('marketingstrat').value = "-";
+           } 
+           
+           console.log("(document.getElementById('marketingstrat').value)");
+           console.log((document.getElementById('marketingstrat').value));
+           console.log((document.getElementById('bmodel').value).toString() );
+           console.log((document.getElementById('marketingstrat').value).length);
+           console.log((document.getElementById('bmodel').value).length);
+
+           const saveForm = document.getElementById('saveformForm');
            const messageDiv = document.getElementById('message');
  
          
-           registerForm.addEventListener('submit', async (e) => {
+           saveForm.addEventListener('submit', async (e) => {
              e.preventDefault();
-             
-             console.log("form");
-
-            
-             console.log(document.getElementById('form-db').innerHTML);
-             console.log("-");
-             document.getElementById('financialplan').setAttribute("value" , document.getElementById('financialplan').value);
-             document.getElementById('operationalplan').setAttribute("value" , document.getElementById('operationalplan').value);
-             //  document.getElementById('coverview').setAttribute("value", document.getElementById('overview').value);
-             const formshtml= document.getElementById('form-db').innerHTML;
-             console.log("document.getElementById('overview').value ");
-             console.log(document.getElementById('coverview').value );
-             console.log(document.getElementById('esummary').value );
-             console.log(document.getElementById('coverview').value );
-             console.log("formshtml");
-             console.log(formshtml);
-             const formData = {
-               formcontent: formshtml,          
+                        
+             let html_form = ` 
+                
+                  <br><br><br><br>
+                  <!-- Start of form inputs -->  
+                  <h4>One Page Business Plan</h4>
+                  <hr>
+                  <div>
+                     <form id="saveformForm">
+                        <div class="form-group">
+                           <h6 class="section-secondary-title"> Executive Summary</h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="esummary" value="`+ document.getElementById('esummary').value  +`" name="esummary" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?">`+document.getElementById('esummary').value  +` </textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title" > Company Overview</h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="coverview" name="coverview" value="`+document.getElementById('coverview').value  +`"  placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('coverview').value  +`</textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title" > Market Research</h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control"  id="mresearch" name="mresearch" value="`+document.getElementById('mresearch').value  +`" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?">`+document.getElementById('mresearch').value  +` </textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title" > Products/Services</h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control"  id="productser" value="`+document.getElementById('productser').value  +`" name="productser" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('productser').value  +`</textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title" > Marketing & Sales Strategy </h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="marketingstrat" name="marketingstrat"  value="`+ document.getElementById('marketingstrat').value  +`" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('marketingstrat').value  +` </textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title" > Business Model</h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="bmodel" value="`+document.getElementById('bmodel').value  +`" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('bmodel').value  +` </textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title"> Financials </h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="financialplan" value="`+document.getElementById('financialplan').value  +`" name="coverview" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('financialplan').value  +` </textarea>
+                        </div>
+                        <div class="form-group">
+                           <h6 class="section-secondary-title"> Operational Plan </h6>
+                        </div>
+                        <div class="form-group">
+                           <textarea class="form-control" id="operationalplan" name="coverview" value="`+document.getElementById('operationalplan').value  +`" placeholder="What is the core purpose of my business? What makes my business unique or different from competitors?"> `+document.getElementById('operationalplan').value  +`</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button><br><br>
+                     </form>
+                  </div>
+               `;
+               const formData = {
+               formcontent: html_form,          
                type: "One Page Business Plan",
                description: "-",
              };
-             
+
+             console.log("html_form");
+             console.log(html_form);
              try {
                const response = await fetch('/api/addform', {
                  method: 'POST',
@@ -203,19 +237,24 @@
                    'Content-Type': 'application/json'
                  },
                  body: JSON.stringify(formData)
+               }).then( async (res) => {
+                    
+                  const data = await res.json();
+                  console.log("await data");
+                  
+
+                  if (res.ok) {
+                     showMessage(data.message, 'success');
+                     console.log("await data");
+                     console.log(data);
+                     saveForm.reset();
+                  } else {
+                     showMessage(data.error, 'error');
+                  }
+
                });
                
-               const data = await response.json();
-               console.log("await data");
                
-               if (response.ok) {
-                 showMessage(data.message, 'success');
-                 console.log("await data");
-                 console.log(data);
-                 registerForm.reset();
-               } else {
-                 showMessage(data.error, 'error');
-               }
              } catch (error) {
                console.error('Registration error:', error);
                showMessage('An error occurred. Please try again.', 'error');
